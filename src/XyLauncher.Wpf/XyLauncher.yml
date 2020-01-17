@@ -4,3 +4,10 @@ root-directories:
   - { path: 'D:\code\projects\', shortcut: 'p' }
   - { path: 'D:\code\tests\', shortcut: 't' }
   - { path: 'D:\code\tests\phoenix.projects\', shortcut: 'nix' }
+
+commands:
+  Explorer: 'explorer "$0"'
+  VS Code: 'code "$0"'
+  VisualStudio:
+  - { name: 'VS2019 Preview', command: 'vs 2019 "$0"', isDefault: true }
+  - VS2017 Pro: vs "$0"

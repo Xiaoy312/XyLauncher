@@ -6,10 +6,15 @@
 				 xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
 				 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 				 xmlns:models="clr-namespace:XyLauncher.Models;assembly=XyLauncher"
+				 xmlns:converters="clr-namespace:XyLauncher.Wpf.Converters"
 				 Title="XY LAUNCHER"
 				 Width="800"
 				 Height="450"
 				 mc:Ignorable="d">
+	<mah:MetroWindow.Resources>
+		<converters:ArrayConverter x:Key="ArrayConverter" />
+	</mah:MetroWindow.Resources>
+
 	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto" />
@@ -31,18 +36,34 @@
 				  ItemsSource="{Binding FilteredProjectDirectories}">
 			<ListView.ItemTemplate>
 				<DataTemplate DataType="{x:Type models:ProjectDirectory}">
-					<StackPanel Margin="0 8">
+					<StackPanel Margin="0,8">
 						<TextBlock>
 							<Run Text="{Binding Path=RootDirectoryName, StringFormat='[{0}]'}" />
 							<Run FontWeight="Bold" Text="{Binding Path=Name}" />
 						</TextBlock>
 						<TextBlock Text="{Binding Path=Path}" />
 
-						<WrapPanel Margin="0,10,0,0">
-							<Button Content="Explorer" />
-							<Button Content="Code" />
-							<mah:DropDownButton Content="VisualStudio" />
-						</WrapPanel>
+						<ItemsControl Margin="0,10,0,0"
+									  ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=mah:MetroWindow}, Path=DataContext.LauncherCommands}">
+							<ItemsControl.ItemTemplate>
+								<DataTemplate>
+									<Button Content="{Binding Name}"
+											Command="{Binding RelativeSource={RelativeSource AncestorType=mah:MetroWindow}, Path=DataContext.ExecuteLauncherCommand}">
+										<Button.CommandParameter>
+											<MultiBinding Converter="{StaticResource ArrayConverter}">
+												<Binding RelativeSource="{RelativeSource AncestorType=StackPanel}" Path="DataContext" />
+												<Binding />
+											</MultiBinding>
+										</Button.CommandParameter>
+									</Button>
+								</DataTemplate>
+							</ItemsControl.ItemTemplate>
+							<ItemsControl.ItemsPanel>
+								<ItemsPanelTemplate>
+									<WrapPanel />
+								</ItemsPanelTemplate>
+							</ItemsControl.ItemsPanel>
+						</ItemsControl>
 					</StackPanel>
 				</DataTemplate>
 			</ListView.ItemTemplate>

@@ -7,11 +7,15 @@ namespace XyLauncher.Models
 	public class AppConfig
 	{
 		public IReadOnlyCollection<ScannableRootDirectory> RootDirectories { get; }
+		public IReadOnlyCollection<LauncherCommand> Commands { get; }
 
 		public AppConfig(IConfiguration config)
 		{
 			RootDirectories = config.GetSection("root-directories").GetChildren()
 				.Select(ScannableRootDirectory.Parse)
+				.ToArray();
+			Commands = config.GetSection("commands").GetChildren()
+				.Select(LauncherCommand.Parse)
 				.ToArray();
 		}
 	}
