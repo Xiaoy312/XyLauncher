@@ -6,7 +6,6 @@ using Microsoft.Extensions.Configuration;
 
 namespace XyLauncher.Models
 {
-
 	public class LauncherCommand
 	{
 		public string Name { get; set; }
@@ -15,13 +14,19 @@ namespace XyLauncher.Models
 
 		public static LauncherCommand Parse(IConfigurationSection config)
 		{
-			if (config.GetChildren() is var children && children.Any())
-				return LauncherDropdownCommand.Parse(config);
-
-			return new LauncherCommand
+			if (config.GetChildren() is var children && children.Count() != 1)
 			{
-				Name = config.Key,
-				Command = config.Value,
+				throw new FormatException("Invalid command syntax at: " + config.Path);
+			}
+
+			var item = children.FirstOrDefault();
+			if (item.GetChildren() is var nested && nested.Any())
+				return LauncherDropdownCommand.Parse(item);
+
+			return new LauncherCommand()
+			{
+				Name = item.Key,
+				Command = item.Value
 			};
 		}
 	}
