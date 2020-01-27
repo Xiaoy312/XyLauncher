@@ -2,7 +2,8 @@ root-directories:
   - { path: 'D:\code\framework\', shortcut: 'f' }
   - { path: 'D:\code\framework_release\', shortcut: 'fr' }
   - { path: 'D:\code\projects\', shortcut: 'p' }
-  - { path: 'D:\code\tests\', shortcut: 't' }
+  - { path: 'D:\code\tests\', shortcut: 'tx' }
+  - { path: 'D:\code\tools\', shortcut: 'tl' }
   - { path: 'D:\code\tests\phoenix.projects\', shortcut: 'nix' }
 
 commands:

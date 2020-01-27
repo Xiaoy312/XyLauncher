@@ -39,7 +39,6 @@ namespace XyLauncher.Wpf
 			SearchCommand.ToPropertyEx(this, x => x.FilteredProjectDirectories);
 
 			ExecuteLauncherCommand = ReactiveCommand.CreateFromTask<object[]>(LaunchAsync);
-
 			ExecuteLauncherCommand.ThrownExceptions.Subscribe();
 
 			this.WhenAnyValue(x => x.SearchTerm)
