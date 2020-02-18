@@ -9,6 +9,7 @@
 				 xmlns:converters="clr-namespace:XyLauncher.Wpf.Converters"
 				 xmlns:templateselectors="clr-namespace:XyLauncher.Wpf.TemplateSelectors"
 				 xmlns:controls="clr-namespace:XyLauncher.Wpf.Controls"
+				 Icon="trebuchet.ico"
 				 Title="XY LAUNCHER"
 				 Width="800"
 				 Height="450"
