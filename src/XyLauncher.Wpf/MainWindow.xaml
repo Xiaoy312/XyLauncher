@@ -9,6 +9,7 @@
 				 xmlns:converters="clr-namespace:XyLauncher.Wpf.Converters"
 				 xmlns:templateselectors="clr-namespace:XyLauncher.Wpf.TemplateSelectors"
 				 xmlns:controls="clr-namespace:XyLauncher.Wpf.Controls"
+				 xmlns:behaviors="clr-namespace:XyLauncher.Wpf.Behaviors"
 				 Icon="trebuchet.ico"
 				 Title="XY LAUNCHER"
 				 Width="800"
@@ -43,10 +44,7 @@
 						<StackPanel.Resources>
 							<controls:BindingProxy x:Key="Proxy" Data="{Binding Project}" />
 						</StackPanel.Resources>
-						<TextBlock>
-							<Run Text="{Binding Path=Project.RootShortcut, StringFormat='[{0}]'}" />
-							<Run FontWeight="Bold" Text="{Binding Path=Project.Name}" />
-						</TextBlock>
+						<TextBlock behaviors:ProjectMatchResultHightlightBehavior.Context="{Binding}" />
 						<TextBlock Text="{Binding Path=Project.Path}" Foreground="Gray" />
 
 						<ItemsControl Margin="0,10,0,0" ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=mah:MetroWindow}, Path=DataContext.LauncherCommands}">
