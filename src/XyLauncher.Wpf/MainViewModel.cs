@@ -20,11 +20,11 @@ namespace XyLauncher.Wpf
 
 		[Reactive] public string SearchTerm { get; set; }
 
-		public List<ProjectDirectory> FilteredProjectDirectories { [ObservableAsProperty] get; }
+		public List<ProjectMatchResult> FilteredProjectDirectories { [ObservableAsProperty] get; }
 
 		public IReadOnlyCollection<LauncherCommand> LauncherCommands { get; }
 
-		public ReactiveCommand<string, List<ProjectDirectory>> SearchCommand { get; }
+		public ReactiveCommand<string, List<ProjectMatchResult>> SearchCommand { get; }
 
 		public ReactiveCommand<object[], Unit> ExecuteLauncherCommand { get; }
 
@@ -34,7 +34,7 @@ namespace XyLauncher.Wpf
 			_projectDirectories = ProjectCrawler.Scan(config.RootDirectories).ToArray();
 			LauncherCommands = config.Commands;
 
-			SearchCommand = ReactiveCommand.CreateFromTask<string, List<ProjectDirectory>>(SearchAsync);
+			SearchCommand = ReactiveCommand.CreateFromTask<string, List<ProjectMatchResult>>(SearchAsync);
 			SearchCommand.ThrownExceptions.Subscribe();
 			SearchCommand.ToPropertyEx(this, x => x.FilteredProjectDirectories);
 
@@ -55,19 +55,24 @@ namespace XyLauncher.Wpf
 			.AddYamlFile("XyLauncher.yml", false, true)
 			.Build();
 
-		public async Task<List<ProjectDirectory>> SearchAsync(string searchTerm)
+		public async Task<List<ProjectMatchResult>> SearchAsync(string searchTerm)
 		{
-			return ProjectCrawler.Filter(_projectDirectories, searchTerm).ToList();
+			return ProjectCrawler.Match(_projectDirectories, searchTerm)
+				.Where(x => x.Success)
+				.OrderByDescending(x => x.MatchGroups.Any(y => y.Part == MatchGroupPart.Shortcut))
+				.ThenByDescending(x => x.MatchGroups.Count(y => y.Part == MatchGroupPart.Shortcut) - x.Project.RootShortcut.Length)
+				.ThenByDescending(x => x.MatchGroups.Count)
+				.ToList();
 		}
 
 		public async Task LaunchAsync(object[] parameters)
 		{
-			if (parameters[0] is ProjectDirectory project && parameters[1] is LauncherCommand command)
+			if (parameters[0] is ProjectMatchResult item && parameters[1] is LauncherCommand command)
 			{
 				try
 				{
 					var fragments = command.Command.Split(' ', 2);
-					var psi = new ProcessStartInfo(fragments[0], fragments[1].Replace("$0", project.Path))
+					var psi = new ProcessStartInfo(fragments[0], fragments[1].Replace("$0", item.Project.Path))
 					{
 						UseShellExecute = true
 					};
