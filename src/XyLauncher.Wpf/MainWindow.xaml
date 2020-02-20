@@ -38,16 +38,16 @@
 				  Padding="25"
 				  ItemsSource="{Binding FilteredProjectDirectories}">
 			<ListView.ItemTemplate>
-				<DataTemplate DataType="{x:Type models:ProjectDirectory}">
+				<DataTemplate DataType="{x:Type models:ProjectMatchResult}">
 					<StackPanel x:Name="ProjectPanel" Margin="0,8">
 						<StackPanel.Resources>
-							<controls:BindingProxy x:Key="Proxy" Data="{Binding}" />
+							<controls:BindingProxy x:Key="Proxy" Data="{Binding Project}" />
 						</StackPanel.Resources>
 						<TextBlock>
-							<Run Text="{Binding Path=RootDirectoryName, StringFormat='[{0}]'}" />
-							<Run FontWeight="Bold" Text="{Binding Path=Name}" />
+							<Run Text="{Binding Path=Project.RootShortcut, StringFormat='[{0}]'}" />
+							<Run FontWeight="Bold" Text="{Binding Path=Project.Name}" />
 						</TextBlock>
-						<TextBlock Text="{Binding Path=Path}" />
+						<TextBlock Text="{Binding Path=Project.Path}" Foreground="Gray" />
 
 						<ItemsControl Margin="0,10,0,0" ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=mah:MetroWindow}, Path=DataContext.LauncherCommands}">
 							<ItemsControl.ItemTemplateSelector>
