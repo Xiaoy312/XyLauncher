@@ -86,6 +86,7 @@ namespace XyLauncher
 			return projects?.Select(x => Match(x, query))
 				.Where(x => x.Success)
 				.OrderByDescending(x => x.MatchGroups.Any(y => y.Part == MatchGroupPart.Shortcut))
+				.ThenByDescending(x => x.MatchGroups.Sum(y => y.Length * y.Length))
 				.ThenByDescending(x => x.MatchGroups.Count(y => y.Part == MatchGroupPart.Shortcut) - x.Project.RootShortcut.Length)
 				.ThenByDescending(x => x.MatchGroups.Count)
 				.ToList();
