@@ -23,8 +23,6 @@ namespace XyLauncher
 			);
 		}
 
-		public static IEnumerable<ProjectMatchResult> Match(IEnumerable<ProjectDirectory> projects, string query) => projects?.Select(x => Match(x, query));
-
 		public static ProjectMatchResult Match(ProjectDirectory project, string query)
 		{
 			if (string.IsNullOrEmpty(query)) return new ProjectMatchResult { Project = project, Success = true };
@@ -81,6 +79,16 @@ namespace XyLauncher
 			};
 
 			int SearchFromIndex(string text, char c, int index) => text.ToLowerInvariant().IndexOf(c, index);
+		}
+
+		public static IEnumerable<ProjectMatchResult> RankedMatch(IEnumerable<ProjectDirectory> projects, string query, bool includeNonMatch = false)
+		{
+			return projects?.Select(x => Match(x, query))
+				.Where(x => x.Success)
+				.OrderByDescending(x => x.MatchGroups.Any(y => y.Part == MatchGroupPart.Shortcut))
+				.ThenByDescending(x => x.MatchGroups.Count(y => y.Part == MatchGroupPart.Shortcut) - x.Project.RootShortcut.Length)
+				.ThenByDescending(x => x.MatchGroups.Count)
+				.ToList();
 		}
 	}
 }

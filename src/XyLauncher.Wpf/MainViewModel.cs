@@ -55,15 +55,7 @@ namespace XyLauncher.Wpf
 			.AddYamlFile("XyLauncher.yml", false, true)
 			.Build();
 
-		public async Task<List<ProjectMatchResult>> SearchAsync(string searchTerm)
-		{
-			return ProjectCrawler.Match(_projectDirectories, searchTerm)
-				.Where(x => x.Success)
-				.OrderByDescending(x => x.MatchGroups.Any(y => y.Part == MatchGroupPart.Shortcut))
-				.ThenByDescending(x => x.MatchGroups.Count(y => y.Part == MatchGroupPart.Shortcut) - x.Project.RootShortcut.Length)
-				.ThenByDescending(x => x.MatchGroups.Count)
-				.ToList();
-		}
+		public async Task<List<ProjectMatchResult>> SearchAsync(string searchTerm) => ProjectCrawler.RankedMatch(_projectDirectories, searchTerm).ToList();
 
 		public async Task LaunchAsync(object[] parameters)
 		{
