@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XyLauncher", "src\XyLaunche
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XyLauncher.Wpf", "src\XyLauncher.Wpf\XyLauncher.Wpf.csproj", "{CC2A901A-B517-4C85-A260-37400BFE5F01}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XyLauncher.Tests", "XyLauncher.Tests\XyLauncher.Tests.csproj", "{37659122-2E5E-40EC-9905-B6FB511E38EC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XyLauncher.Tests", "src\XyLauncher.Tests\XyLauncher.Tests.csproj", "{37659122-2E5E-40EC-9905-B6FB511E38EC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
